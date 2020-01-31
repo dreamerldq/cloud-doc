@@ -1,0 +1,8 @@
+.fileTab{
+  width: 100px;
+  height: 100%;
+  background: #ebebeb;
+  justify-content: space-between;
+  padding: 0 10px;
+  border: solid 1px rgb(194, 194, 255);
+}

@@ -6,5 +6,6 @@ app.on('ready', () => {
     height:640
   })
   const urlLocation = isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, './index.html')}`
+  window.webContents.openDevTools()
   window.loadURL(urlLocation)
 })

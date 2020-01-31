@@ -1,0 +1,8 @@
+.markItem{
+  height: 40px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgb(189, 163, 163);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.8);
+}
