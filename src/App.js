@@ -3,9 +3,10 @@ import logo from './logo.svg';
 import './App.css';
 import 'antd/dist/antd.css';
 import { Layout } from 'antd'
-import MarkItem from './components/MarkItem'
+import FileList from './components/FileList'
 import SearchBar from './components/SearchBar'
 import FileTab from './components/FileTab'
+import BottomBtn from './components/BottomBtn'
 const {
   Header,
   Footer,
@@ -26,9 +27,10 @@ const [files, setFiles] = useState([
 }])
 const handleSearchValue = (value) => {
   setSearchValue(value)
+  console.log('searchValue',value);
 }
-const handleEditMark = (id) => {
- 
+const handleEditMark = (id, value) => {
+  console.log("EDIT",id, value)
 }
 const handleDeleteMark = (id) => {
    setFiles(files.filter((item) => item.id !== id))
@@ -36,18 +38,31 @@ const handleDeleteMark = (id) => {
 const handleClick = (file) => {
   setFileTabs([...fileTabs, file])
 }
+const handleFileAdd = () => {
+  console.log("file add")
+}
+const handleFileImport = () => {
+  console.log("file import ")
+}
   return (
     <Layout>
        <Sider theme="light">
         <SearchBar onInputChange={handleSearchValue}/>
-        <div className="markList">
-           {
-             files.map((item) => {
-               return(
-                 <MarkItem clickItem={handleClick} key={item.id} file={item} title={item.title} editItem={handleEditMark} deleteItem={handleDeleteMark}></MarkItem>
-               )
-             })
-           }
+        <FileList files={files} editItem={handleEditMark} deleteItem={handleDeleteMark} clickItem={handleClick}></FileList>
+        <div className="bottomBtns">
+          <BottomBtn 
+          clickButton={handleFileAdd}
+          iconName="file-add"
+          title="新建"
+          colorType = "primary" >
+          </BottomBtn>
+           
+           <BottomBtn 
+          clickButton={handleFileImport}
+          iconName="folder"
+          title="导入"
+           > 
+          </BottomBtn>
         </div>
        </Sider>
       <Layout>

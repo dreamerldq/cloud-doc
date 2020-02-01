@@ -1,34 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Button, Input } from 'antd'
+import useKeyPress from '../../hooks/useKeyPress'
 import './style.css'
 const SearchBar = ({ onInputChange}) => {
   const [searchValue, setSearchValue] = useState('')
   const [searchStatus, setSearchStatus] = useState(false)
   const ref = useRef(null)
+  const enterKeyPress = useKeyPress(13)
+  const escKeyPress = useKeyPress(27)
   useEffect(() => {
-    document.addEventListener('keyup', handleKeyCode)
-    return () => {
-      document.removeEventListener('keyup', handleKeyCode)
-    };
-  })
-  const handleKeyCode = (event) => {
-    const {
-      keyCode
-    } = event
-    if (keyCode === 13) {
-      setSearchStatus(false)
+    if(enterKeyPress && searchStatus){
       onInputChange(searchValue)
-      setSearchValue('')
     }
-    if (keyCode === 27) {
-      setSearchStatus(false)
-      setSearchValue('')
+    if(escKeyPress && searchStatus){
+      closeSearch()
     }
+  })
+  useEffect(() => {
+    if(searchStatus){
+      ref.current.focus()
+    }
+  },[searchStatus])
+  const closeSearch = () => {
+  setSearchStatus(false)
+  setSearchValue('')
   }
-  const handleSearch = () => {
-    setSearchStatus(true)
-    
-  }
+
   const handleValue = (event) => {
     const {
       value
@@ -40,11 +37,14 @@ const SearchBar = ({ onInputChange}) => {
       <div>
         {
           searchStatus ? 
-            <Input ref={ref} onInput={handleValue} placeholder="请输入搜索内容"></Input>
+           <div className="searchInput">
+              <Input ref={ref} onInput={handleValue} placeholder="请输入搜索内容"></Input>
+              <Button icon="close" onClick={closeSearch}></Button>
+           </div>
             :
             <div className = "searchBtn" >
-              <span>搜索</span>
-              <Button onClick={handleSearch} type="primary" icon="search">
+              <span>我的云文档</span>
+              <Button onClick={() => { setSearchStatus(true)}} type="primary" icon="search">
               </Button>
             </div>
 
