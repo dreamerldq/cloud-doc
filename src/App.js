@@ -20,26 +20,55 @@ const {
 const App = () => {
 
 const [searchValue, setSearchValue] = useState('')
-const [fileTabs, setFileTabs]  = useState([])
+const [activeFileId, setActiveFileId] = useState('');
+const [openFileIds, setOpenFileIds] = useState([]);
+const [unSaveIds, setUnSaveIds] = useState([])
 const [files, setFiles] = useState([
  { id: 1,
-  title: '文档一'
+  title: '文档一',
+  body:'### Hello World'
 }, {
   id: 2,
-  title: '文档二'
+  title: '文档二',
+  body: '### Hello World MarkDown'
 }])
-const handleSearchValue = (value) => {
-  setSearchValue(value)
-  console.log('searchValue',value);
+const opendFiles = openFileIds.map((openId) => {
+  return files.find((file) => file.id === openId)
+})
+const activeFile = files.find(file => file.id === activeFileId)
+
+const handleSearchValue = (title) => {
+  const searchFiles = files.filter((file) => file.title.includes(title) )
+  // setSearchValue(value)
+  // console.log('searchValue',value);
+  setFiles(searchFiles)
 }
 const handleEditMark = (id, value) => {
   console.log("EDIT",id, value)
+  const newFiles = files.map((file) => {
+    if(file.id === id){
+      return {
+        ...file,
+        title: value
+      }
+    }
+    return file
+    
+  })
+  setFiles(newFiles)
 }
 const handleDeleteMark = (id) => {
    setFiles(files.filter((item) => item.id !== id))
+   handleTabClose(id)
 }
 const handleClick = (file) => {
-  setFileTabs([...fileTabs, file])
+  // 将file.id push 到openFileIds
+  // 将 activeId 设置为file.id
+  if(!openFileIds.includes(file.id)){
+      setActiveFileId(file.id)
+      setOpenFileIds([...openFileIds, file.id])
+  }
+
 }
 const handleFileAdd = () => {
   console.log("file add")
@@ -49,9 +78,33 @@ const handleFileImport = () => {
 }
 const handleTabClick = (id) => {
   console.log("tab clicked", id)
+  // 设置activeId
+  setActiveFileId(id)
 }
 const handleTabClose = (id) => {
   console.log('tab closed', id)
+  // 从openFilesId中移除id
+  const newOpenFileIds = openFileIds.filter((openId) => openId !== id)
+  setOpenFileIds(newOpenFileIds)
+  if(newOpenFileIds.length> 0){
+    setActiveFileId(newOpenFileIds[0])
+  }
+}
+const fileChange = (id, value) => {
+  console.log("new value", value, id)
+  const newFiles = files.map((file) => {
+    if(file.id === id){
+      return{
+        ...file,
+        body: value
+      }
+    }
+    return file
+  })
+  setFiles(newFiles)
+  if(!unSaveIds.includes(id)){
+  setUnSaveIds([...unSaveIds, id])
+  }
 }
   return (
     <Layout>
@@ -77,18 +130,12 @@ const handleTabClose = (id) => {
       <Layout>
         
         <Content>
-         <TabList unsavedIds={[1]} activeId={1} files={files} onCloseTab={handleTabClose} onTabClick ={handleTabClick}></TabList>
+         <TabList unsavedIds={unSaveIds} activeId={activeFileId} files={opendFiles} onCloseTab={handleTabClose} onTabClick ={handleTabClick}></TabList>
 
          <SimpleMDE
-            id="your-custom-id"
-            label="Your label"
-            // onChange={this.handleChange}
-            value={'### Hello World'}
-            options={{
-              autofocus: true,
-              spellChecker: false
-              // etc.
-            }}
+            id={activeFile && activeFile.id}
+            onChange={(value) => {fileChange(activeFile.id, value)}}
+            value={activeFile && activeFile.body}
           />;
         </Content>
         
