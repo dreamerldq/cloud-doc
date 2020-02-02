@@ -5,7 +5,6 @@ import 'antd/dist/antd.css';
 import { Layout } from 'antd'
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
-
 import FileList from './components/FileList'
 import SearchBar from './components/SearchBar'
 import TabList from './components/TabList'
