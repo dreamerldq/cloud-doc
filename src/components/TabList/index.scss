@@ -1,0 +1,65 @@
+.tabList {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 10px;
+  background: #fff;
+  border: solid 1px rgb(194, 194, 255);
+}
+
+.normalTab{
+  width: 80px;
+  height: 100%;
+  background: #ebebeb;
+  border-radius: 9px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  &:hover{
+    .closeBtn{
+      visibility: visible
+    }
+  }
+}
+.activeTab {
+  width: 80px;
+  height: 100%;
+  background: #5db2f8;
+  border-radius: 9px;
+  display: flex;
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+  
+    .closeBtn {
+      visibility: visible
+    }
+  
+}
+.closeBtn{
+  visibility: hidden;
+}
+.cicle{
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgb(255, 172, 172)
+  
+}
+.withUnsave{
+  .closeBtn {
+    display: none;
+  }
+}
+.withUnsave {
+  &:hover{
+    .closeBtn {
+      display: block;
+    }
+    .cicle{
+      display: none;
+    }
+  }
+}

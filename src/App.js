@@ -3,9 +3,12 @@ import logo from './logo.svg';
 import './App.css';
 import 'antd/dist/antd.css';
 import { Layout } from 'antd'
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
+
 import FileList from './components/FileList'
 import SearchBar from './components/SearchBar'
-import FileTab from './components/FileTab'
+import TabList from './components/TabList'
 import BottomBtn from './components/BottomBtn'
 const {
   Header,
@@ -44,6 +47,12 @@ const handleFileAdd = () => {
 const handleFileImport = () => {
   console.log("file import ")
 }
+const handleTabClick = (id) => {
+  console.log("tab clicked", id)
+}
+const handleTabClose = (id) => {
+  console.log('tab closed', id)
+}
   return (
     <Layout>
        <Sider theme="light">
@@ -68,15 +77,19 @@ const handleFileImport = () => {
       <Layout>
         
         <Content>
-          <div className="fileTabs">
-            {
-              fileTabs.map((item) => {
-                return(
-                  <FileTab file={item} key={item.id}></FileTab>
-                )
-              })
-            }
-          </div>
+         <TabList unsavedIds={[1]} activeId={1} files={files} onCloseTab={handleTabClose} onTabClick ={handleTabClick}></TabList>
+
+         <SimpleMDE
+            id="your-custom-id"
+            label="Your label"
+            // onChange={this.handleChange}
+            value={'### Hello World'}
+            options={{
+              autofocus: true,
+              spellChecker: false
+              // etc.
+            }}
+          />;
         </Content>
         
       </Layout>
