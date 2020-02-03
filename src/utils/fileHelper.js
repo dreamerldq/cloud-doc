@@ -12,11 +12,10 @@ const fileHelper = {
   },
   deleteFile: (path) => {
     return fs.unlink(path)
+  },
+  readDir: (path) => {
+    return fs.readdir(path)
   }
 }
-const testPath = path.join(__dirname, 'helper.js')
-const testWrite = path.join(__dirname, 'hello.md')
-fileHelper.readFile(testPath).then((data) => {console.log(data)})
-fileHelper.writeFile(testWrite, '## Hello World').then(() => console.log('写入成功'))
 
 export default fileHelper

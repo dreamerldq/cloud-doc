@@ -3,6 +3,7 @@ import './index.scss'
 import { Icon } from 'antd'
 import classnames from 'classnames'
 const TabList = ({files, activeId, unsavedIds, onTabClick, onCloseTab}) => {
+  console.log("QQQ", files)
   return(
     <div className="tabList">
        {

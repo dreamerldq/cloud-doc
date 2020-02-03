@@ -27,9 +27,9 @@ const FileList = ({
        editItem(editFile.id, value, editFile.isNew)
        setEditState(false)
     }
-    if (escKeyPress && setEditState) {
-      closeSearch(editFile)
-    }
+    // if (escKeyPress && setEditState) {
+    //   closeSearch(editFile)
+    // }
   })
   const handleClick = (file) => {
      clickItem(file)
