@@ -9,6 +9,10 @@ import FileList from './components/FileList'
 import SearchBar from './components/SearchBar'
 import TabList from './components/TabList'
 import BottomBtn from './components/BottomBtn'
+import fileHelper from './utils/fileHelper'
+const uuidv4 = require('uuid/v4');
+const { join } = window.require('path')
+const { remote } = window.require('electron')
 const {
   Header,
   Footer,
@@ -22,6 +26,7 @@ const [searchValue, setSearchValue] = useState('')
 const [activeFileId, setActiveFileId] = useState('');
 const [openFileIds, setOpenFileIds] = useState([]);
 const [unSaveIds, setUnSaveIds] = useState([])
+const savedLocation = remote.app.getPath('documents')
 const [files, setFiles] = useState([
  { id: 1,
   title: '文档一',
@@ -42,19 +47,41 @@ const handleSearchValue = (title) => {
   // console.log('searchValue',value);
   setFiles(searchFiles)
 }
-const handleEditMark = (id, value) => {
-  console.log("EDIT",id, value)
+const handleEditMark = (id, title, isNew) => {
+  console.log("EDIT",id, title)
   const newFiles = files.map((file) => {
     if(file.id === id){
       return {
         ...file,
-        title: value
+        title,
+        isNew: false
       }
     }
     return file
-    
   })
-  setFiles(newFiles)
+   const fileItem = files.find((item) => item.id === id)
+  if(isNew){
+   
+    console.log('新建的markdown', fileItem);
+    fileHelper.writeFile(join(savedLocation, `${title}.md`), fileItem.body).then(() => {
+       const newFiles = files.map((file) => {
+         if (file.id === id) {
+           return {
+             ...file,
+             title,
+             isNew: false
+           }
+         }
+         return file
+       })
+       setFiles(newFiles)
+
+    })
+  }else{
+    fileHelper.renameFile(join(savedLocation, `${fileItem.title}.md`), join(savedLocation, `${title}.md`)).then(() => {
+        setFiles(newFiles)
+    })
+  }
 }
 const handleDeleteMark = (id) => {
    setFiles(files.filter((item) => item.id !== id))
@@ -70,7 +97,14 @@ const handleClick = (file) => {
 
 }
 const handleFileAdd = () => {
-  console.log("file add")
+  const newFile = {
+    title: '',
+    body: '## 请输入· MarkDown',
+    id: uuidv4(),
+    isNew: true
+  }
+  setFiles([...files, newFile])
+  
 }
 const handleFileImport = () => {
   console.log("file import ")
